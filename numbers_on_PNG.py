@@ -1,3 +1,12 @@
+"""
+TEXT_TO_IMAGE
+Authors: Subbotin Grigory, Nickolay Tihonskiy
+
+This program must be used to create ASCII art from a simple image.
+
+Enjoy)
+
+"""
 from PIL import Image, ImageFont, ImageDraw
 from random import randint, choice
 from math import sqrt, pi
@@ -10,7 +19,7 @@ Gray2Ascii = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,`'
 
 # Current length is 68
 
-
+#Some number generator
 def num_generator(x, y, brightness, mode, **kwargs):
     if mode == 0:
         char = 2 ** randint(x, y)
@@ -19,13 +28,15 @@ def num_generator(x, y, brightness, mode, **kwargs):
         char = Gray2Ascii[brightness // 4]
     return str(char)
 
-
+#RGB color generator
 def rgb_random(min, max):
     r = randint(min, max)
     g = randint(min, max)
     b = randint(min, max)
     return [r, g, b]
-  
+
+
+#Image resizer
 def image_sizer(input_path,output_path,width_new, height_new,size, x, y,):
     image = Image.open(input_path)
     image_new = Image.new("RGB", (width_new,height_new), "black")
@@ -40,11 +51,11 @@ def image_sizer(input_path,output_path,width_new, height_new,size, x, y,):
             r = pix[i, j][0]
             g = pix[i, j][1]
             b = pix[i, j][2]
-            draw.line((i,j)+bias, fill = (r,g,b))
+            draw.line((i,j//2)+bias, fill = (r,g,b))
     image_new.save(output_path)
     image_new.show()
 
-
+#Imgae modifier
 def image_mod(input_path, output_path, font, **kwargs):
     # Setting up function config
     size = 12
@@ -78,7 +89,6 @@ def image_mod(input_path, output_path, font, **kwargs):
                           "black")
     pix = image.load()
     draw = ImageDraw.Draw(image_new)
-
     font = ImageFont.truetype(font, size)
 
     # Defining step for each pixel in input image
@@ -99,6 +109,8 @@ def image_mod(input_path, output_path, font, **kwargs):
     image_new.save(output_path)
     image_new.show()
 
+#main function 
+#@username@ choocing edit mode and use this mode on image
 
 if __name__ == "__main__":
     # kwargs are all optional
@@ -109,8 +121,8 @@ if __name__ == "__main__":
     # mode, ascii or numbers, default is numbers, ascii uses hsv brightness
     # bw - blackwhite mode, 0 for full color, 1 for black and white, 2 for white symbols only
     # examples
-    #image_sizer("input1.png", "output_3.png",3840 ,2160, 4, 0, 0)
+    #image_sizer("putin.png", "output_3.png",3840 ,2160, 4, 0, 0)
     # image_mod("input.png", "output.png", "numbers_1024.ttf")
-    # image_mod("input.png", "output.png", "numbers_1024.ttf",mode = 'ascii')
-    image_mod("input.png", "output.png", "numbers_1024.ttf", mode='ascii', fontspacing=0.7, resolution=2, bw=2)
+    #image_mod("input.png", "output.png", "numbers_1024.ttf",mode = 'ascii')
+    #image_mod("input.png", "output.png", "numbers_1024.ttf", mode='ascii', fontspacing=0.7, resolution=2, bw=2)
     # image_mod("input.png", "output.png","numbers_1024.ttf", fontsize = 50, resolution = 0.5, fontspacing = 1, jitter = 0, mode = "asci", bw = 1)
