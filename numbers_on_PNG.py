@@ -25,6 +25,24 @@ def rgb_random(min, max):
     g = randint(min, max)
     b = randint(min, max)
     return [r, g, b]
+  
+def image_sizer(input_path,output_path,width_new, height_new,size, x, y,):
+    image = Image.open(input_path)
+    image_new = Image.new("RGB", (width_new,height_new), "black")
+    width = image.size[0]
+    height = image.size[1]
+    pix = image.load()
+    draw = ImageDraw.Draw(image_new)
+    step = 1
+    bias = image.size 
+    for i in range(0,width,step):
+        for j in range(0,height,step):
+            r = pix[i, j][0]
+            g = pix[i, j][1]
+            b = pix[i, j][2]
+            draw.line((i,j)+bias, fill = (r,g,b))
+    image_new.save(output_path)
+    image_new.show()
 
 
 def image_mod(input_path, output_path, font, **kwargs):
@@ -60,6 +78,7 @@ def image_mod(input_path, output_path, font, **kwargs):
                           "black")
     pix = image.load()
     draw = ImageDraw.Draw(image_new)
+
     font = ImageFont.truetype(font, size)
 
     # Defining step for each pixel in input image
@@ -90,6 +109,7 @@ if __name__ == "__main__":
     # mode, ascii or numbers, default is numbers, ascii uses hsv brightness
     # bw - blackwhite mode, 0 for full color, 1 for black and white, 2 for white symbols only
     # examples
+    #image_sizer("input1.png", "output_3.png",3840 ,2160, 4, 0, 0)
     # image_mod("input.png", "output.png", "numbers_1024.ttf")
     # image_mod("input.png", "output.png", "numbers_1024.ttf",mode = 'ascii')
     image_mod("input.png", "output.png", "numbers_1024.ttf", mode='ascii', fontspacing=0.7, resolution=2, bw=2)
