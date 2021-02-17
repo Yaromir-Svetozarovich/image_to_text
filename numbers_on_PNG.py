@@ -1,6 +1,6 @@
 """
 TEXT_TO_IMAGE
-Authors: Subbotin Grigory, Nickolay Tihonskiy
+Authors: Subbotin Grigory, WirelessM8
 
 This program must be used to create ASCII art from a simple image.
 
@@ -20,12 +20,14 @@ Gray2Ascii = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,`'
 # Current length is 68
 
 #Some number generator
-def num_generator(x, y, brightness, mode, **kwargs):
+def num_generator(x, y, hsv, mode, **kwargs):
     if mode == 0:
         char = 2 ** randint(x, y)
     if mode == 1:
         # Brightness is expecting to be in 0-255 range, so to fit the charmap it is divided by 4
-        char = Gray2Ascii[brightness // 4]
+        char = Gray2Ascii[hsv[2] // 4]
+    if mode == 2:
+        char = 2 ** (int(hsv[1]*8)+4)
     return str(char)
 
 #RGB color generator
@@ -72,6 +74,8 @@ def image_mod(input_path, output_path, font, **kwargs):
         if key == 'jitter':
             randomness = int(value)
         if key == 'mode':
+            if value == "number_color":
+                mode = 2
             if value == "ascii":
                 mode = 1
             if value == "number":
@@ -105,7 +109,7 @@ def image_mod(input_path, output_path, font, **kwargs):
                 r, g, b = 255, 255, 255
             text_pos = (i * resolution_coeff * font_spacing + randint(-randomness, randomness),
                         j * resolution_coeff * font_spacing + randint(-randomness, randomness))
-            draw.text(text_pos, (num_generator(4, 9, hsv[2], mode)), font=font, fill=(r, g, b))
+            draw.text(text_pos, (num_generator(4, 9, hsv, mode)), font=font, fill=(r, g, b))
     image_new.save(output_path)
     image_new.show()
 
@@ -125,4 +129,4 @@ if __name__ == "__main__":
     # image_mod("input.png", "output.png", "numbers_1024.ttf")
     #image_mod("input.png", "output.png", "numbers_1024.ttf",mode = 'ascii')
     #image_mod("input.png", "output.png", "numbers_1024.ttf", mode='ascii', fontspacing=0.7, resolution=2, bw=2)
-    # image_mod("input.png", "output.png","numbers_1024.ttf", fontsize = 50, resolution = 0.5, fontspacing = 1, jitter = 0, mode = "asci", bw = 1)
+    image_mod("input1.png", "output.png","numbers_1024.ttf", fontsize = 10, resolution = 0.5, fontspacing = 2, jitter = 0, mode = "number_color")
